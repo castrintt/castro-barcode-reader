@@ -52,5 +52,5 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.honeywell.aidc:datacollection:+'
+
 }
