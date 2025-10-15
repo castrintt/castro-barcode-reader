@@ -1,7 +1,7 @@
 {
   "name": "castro-barcode-reader",
   "description": "A barcode reader for Honeywell handheld devices like Honeywell EDA60K and EDA61K (tested)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "author": "Igor Castro <igordc38@gmail.com>",
   "repository": {
