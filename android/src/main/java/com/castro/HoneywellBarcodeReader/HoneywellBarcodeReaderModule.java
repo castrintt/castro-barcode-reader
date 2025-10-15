@@ -1,4 +1,4 @@
-package com.duytq94.HoneywellBarcodeReader;
+package com.castro.HoneywellBarcodeReader;
 
 import java.lang.reflect.Method;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.duytq94.HoneywellBarcodeReader;
+package com.castro.HoneywellBarcodeReader;
 
 import java.util.ArrayList;
 import java.util.Collections;
