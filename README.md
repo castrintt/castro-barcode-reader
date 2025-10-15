@@ -32,6 +32,49 @@ or
 yarn add @castrintt/castro-barcode-reader
 ```
 
+### Linking
+
+#### Link automatically (React Native < 0.60):
+```bash
+react-native link @castrintt/castro-barcode-reader
+```
+
+#### Link manually (recommended for all versions):
+
+1. In `android/app/build.gradle` add:
+```gradle
+dependencies {
+    implementation project(':castro-barcode-reader')
+}
+```
+
+2. In `android/settings.gradle` add:
+```gradle
+include ':castro-barcode-reader'
+project(':castro-barcode-reader').projectDir = new File(rootProject.projectDir, '../node_modules/@castrintt/castro-barcode-reader/android')
+```
+
+3. In `android/app/src/main/java/.../MainApplication.java`:
+
+Add this line to import the package:
+```java
+import com.castro.HoneywellBarcodeReader.HoneywellBarcodeReaderPackage;
+```
+
+And add this line to the `getPackages()` method:
+```java
+@Override
+protected List getPackages() {
+    return Arrays.asList(
+        new MainReactPackage(),
+        new HoneywellBarcodeReaderPackage() // Add this line
+    );
+}
+```
+
+**Note:** For React Native 0.60+, autolinking should work automatically. Manual linking is only needed if you encounter issues.
+
+
 ### Android Configuration
 
 Add to `android/app/src/main/AndroidManifest.xml`:
