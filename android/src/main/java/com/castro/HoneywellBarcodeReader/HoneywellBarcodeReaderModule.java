@@ -21,8 +21,6 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import static com.castro.HoneywellBarcodeReader.HoneywellBarcodeReaderPackage.TAG;
-
 import com.honeywell.aidc.AidcManager;
 import com.honeywell.aidc.AidcManager.CreatedCallback;
 import com.honeywell.aidc.BarcodeFailureEvent;
@@ -30,14 +28,14 @@ import com.honeywell.aidc.BarcodeReadEvent;
 import com.honeywell.aidc.BarcodeReader;
 import com.honeywell.aidc.ScannerUnavailableException;
 import com.honeywell.aidc.UnsupportedPropertyException;
+import com.honeywell.aidc.InvalidScannerNameException;
 
 @SuppressWarnings("unused")
 public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule implements BarcodeReader.BarcodeListener {
 
-    // Debugging
     private static final boolean D = true;
+    private static final String TAG = "HoneywellBarcodeReader";
 
-    private static BarcodeReader barcodeReader;
     private AidcManager manager;
     private BarcodeReader reader;
     private ReactApplicationContext mReactContext;
@@ -55,35 +53,29 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
         return "HoneywellBarcodeReader";
     }
 
-    /**
-     * Send event to javascript
-     * @param eventName Name of the event
-     * @param params Additional params
-     */
     private void sendEvent(String eventName, @Nullable WritableMap params) {
         if (mReactContext.hasActiveCatalystInstance()) {
-            if (D) Log.d(TAG, "Sending event: " + eventName);
+            if (D)
+                Log.d(TAG, "Sending event: " + eventName);
             mReactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, params);
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(eventName, params);
         }
     }
 
     public void onBarcodeEvent(BarcodeReadEvent barcodeReadEvent) {
-        if (D) Log.d(TAG, "HoneywellBarcodeReader - Barcode scan read");
+        if (D)
+            Log.d(TAG, "Barcode scan read");
         WritableMap params = Arguments.createMap();
         params.putString("data", barcodeReadEvent.getBarcodeData());
         sendEvent(BARCODE_READ_SUCCESS, params);
     }
 
     public void onFailureEvent(BarcodeFailureEvent barcodeFailureEvent) {
-        if (D) Log.d(TAG, "HoneywellBarcodeReader - Barcode scan failed");
+        if (D)
+            Log.d(TAG, "Barcode scan failed");
         sendEvent(BARCODE_READ_FAIL, null);
     }
-
-    /*******************************/
-    /** Methods Available from JS **/
-    /*******************************/
 
     @ReactMethod
     public void startReader(final Promise promise) {
@@ -91,16 +83,26 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
             @Override
             public void onCreated(AidcManager aidcManager) {
                 manager = aidcManager;
-                reader = manager.createBarcodeReader();
-                if(reader != null){
-                    reader.addBarcodeListener(HoneywellBarcodeReaderModule.this);
-                    try {
-                        reader.claim();
-                        promise.resolve(true);
-                    } catch (ScannerUnavailableException e) {
-                        promise.resolve(false);
-                        e.printStackTrace();
+                try {
+                    reader = manager.createBarcodeReader();
+                    if (reader != null) {
+                        reader.addBarcodeListener(HoneywellBarcodeReaderModule.this);
+                        try {
+                            reader.claim();
+                            promise.resolve(true);
+                        } catch (ScannerUnavailableException e) {
+                            promise.reject("SCANNER_UNAVAILABLE", "Scanner unavailable", e);
+                            e.printStackTrace();
+                        }
+                    } else {
+                        promise.reject("READER_NULL", "Failed to create barcode reader");
                     }
+                } catch (InvalidScannerNameException e) {
+                    promise.reject("INVALID_SCANNER", "Invalid scanner name", e);
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    promise.reject("CREATE_ERROR", "Error creating reader: " + e.getMessage(), e);
+                    e.printStackTrace();
                 }
             }
         });
@@ -121,22 +123,12 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     public void disableScannerNotifications(final Promise promise) {
         try {
             if (reader != null) {
-                reader.setProperty(
-                    BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, 
-                    false
-                );
-                
-                reader.setProperty(
-                    BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, 
-                    false
-                );
-                
-                reader.setProperty(
-                    BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, 
-                    false
-                );
-                
-                if (D) Log.d(TAG, "Scanner notifications disabled");
+                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, false);
+                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, false);
+                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, false);
+
+                if (D)
+                    Log.d(TAG, "Scanner notifications disabled");
                 promise.resolve(true);
             } else {
                 promise.reject("ERROR", "Reader is null. Call startReader first.");
@@ -154,20 +146,12 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     public void enableScannerNotifications(final Promise promise) {
         try {
             if (reader != null) {
-                reader.setProperty(
-                    BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, 
-                    true
-                );
-                reader.setProperty(
-                    BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, 
-                    true
-                );
-                reader.setProperty(
-                    BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, 
-                    true
-                );
-                
-                if (D) Log.d(TAG, "Scanner notifications enabled");
+                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, true);
+                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, true);
+                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, true);
+
+                if (D)
+                    Log.d(TAG, "Scanner notifications enabled");
                 promise.resolve(true);
             } else {
                 promise.reject("ERROR", "Reader is null. Call startReader first.");
