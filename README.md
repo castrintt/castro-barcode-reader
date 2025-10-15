@@ -17,21 +17,18 @@ Fork of [react-native-honeywell-barcode-reader](https://github.com/duytq94/react
 
 ## 📱 Supported Devices
 
-- Honeywell EDA50K
 - Honeywell EDA60K
 - Honeywell EDA61K
-- Honeywell EDA70
-- Honeywell CT50/CT60
 - Other Honeywell devices with integrated scanners
 
 ## 🚀 Installation
 ```bash
-npm install @castrintt/castro-barcode-reader
+npm install castro-barcode-reader
 ```
 
 or
 ```bash
-yarn add @castrintt/castro-barcode-reader
+yarn add castro-barcode-reader
 ```
 
 ### Android Configuration
@@ -45,7 +42,7 @@ Add to `android/app/src/main/AndroidManifest.xml`:
 
 ### Basic Example
 ```typescript
-import HoneywellBarcodeReader from '@castrintt/castro-barcode-reader';
+import HoneywellBarcodeReader from 'castro-barcode-reader';
 
 // Check compatibility
 if (HoneywellBarcodeReader.isCompatible) {
@@ -79,7 +76,7 @@ HoneywellBarcodeReader.offBarcodeReadFail();
 ### React Hook Example
 ```typescript
 import { useEffect } from 'react';
-import HoneywellBarcodeReader from '@castrintt/castro-barcode-reader';
+import HoneywellBarcodeReader from 'castro-barcode-reader';
 
 function useBarcodeScanner(onScan: (data: string) => void) {
   useEffect(() => {
