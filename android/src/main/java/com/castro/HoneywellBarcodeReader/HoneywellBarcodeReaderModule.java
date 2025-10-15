@@ -1,14 +1,9 @@
 package com.castro.HoneywellBarcodeReader;
 
-import java.lang.reflect.Method;
-import java.util.Set;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nullable;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
@@ -17,7 +12,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
@@ -51,6 +45,17 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     @Override
     public String getName() {
         return "HoneywellBarcodeReader";
+    }
+
+    // Adicione estes métodos para evitar warnings
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Keep: Required for RN built-in Event Emitter Calls
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Keep: Required for RN built-in Event Emitter Calls
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
