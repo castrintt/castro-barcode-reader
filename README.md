@@ -1,98 +1,203 @@
-# React Native Honeywell Barcode Reader
+# @castrintt/castro-barcode-reader
 
-This package works with Honeywell devices that have an integrated barcode scanner, like the Honeywell EDA50K (tested).
+[![npm version](https://badge.fury.io/js/%40castrintt%2Fcastro-barcode-reader.svg)](https://www.npmjs.com/package/@castrintt/castro-barcode-reader)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Actually, I custom from https://github.com/Volst/react-native-honeywell-scanner but fix cannot remove event listener (even you close the reader). And if you don't remove, the event will fire twice, triple... more and more times when you call `addListener` until you kill the app.
+React Native library for Honeywell barcode scanners with enhanced notification control.
 
-The bug at here is you can not remove event listener by call `DeviceEventEmitter.removeListener(eventName, handler)` since it doesn't have this method. Follow here: https://stackoverflow.com/questions/36886628/how-do-you-remove-a-listener-from-react-natives-eventemitter-instance
+Fork of [react-native-honeywell-barcode-reader](https://github.com/duytq94/react-native-honeywell-barcode-reader) with additional features.
 
-## 🆕 New Features
+## ✨ Features
 
-- ✅ `disableScannerNotifications()` method - Disables sound and vibration
-- ✅ `enableScannerNotifications()` method - Re-enables notifications
-- ✅ Generic `setReaderProperty` methods
+- ✅ Read barcodes from Honeywell integrated scanners
+- ✅ **NEW:** Disable/enable scanner notifications (sound & vibration)
+- ✅ **NEW:** Generic property setters for advanced configuration
+- ✅ TypeScript support
+- ✅ Compatible with modern React Native versions
 
-## Installation
+## 📱 Supported Devices
 
-```
-npm i castro-barcode-reader
-```
+- Honeywell EDA50K
+- Honeywell EDA60K
+- Honeywell EDA61K
+- Honeywell EDA70
+- Honeywell CT50/CT60
+- Other Honeywell devices with integrated scanners
 
-## Link automatically:
-
-```
-react-native link castro-barcode-reader
-```
-
-## Link manually (recommend):
-
-1. In `app\build.gradle` add
-```
-compile project(':castro-barcode-reader')
+## 🚀 Installation
+```bash
+npm install @castrintt/castro-barcode-reader
 ```
 
-2. In `settings.gradle` add
-
-```
-include ':castro-barcode-reader'
-project(':castro-barcode-reader').projectDir = new File(rootProject.projectDir, '../node_modules/castro-barcode-reader/android')
+or
+```bash
+yarn add @castrintt/castro-barcode-reader
 ```
 
-3. In `MainApplication.java`
+### Android Configuration
 
-Add this line to import package
-```
-import com.duytq94.HoneywellBarcodeReader.HoneywellBarcodeReaderPackage;
-```
-and add this line to getPackages()
-```
-new HoneywellBarcodeReaderPackage()
+Add to `android/app/src/main/AndroidManifest.xml`:
+```xml
+<uses-permission android:name="com.honeywell.decode.permission.DECODE"/>
 ```
 
-## Usage
+## 📖 Usage
 
-First you'll want to check whether the device is a Honeywell scanner:
+### Basic Example
+```typescript
+import HoneywellBarcodeReader from '@castrintt/castro-barcode-reader';
 
-```js
-import HoneywellBarcodeReader from 'react-native-honeywell-barcode-reader';
+// Check compatibility
+if (HoneywellBarcodeReader.isCompatible) {
+  console.log('Device is compatible!');
+}
 
-HoneywellBarcodeReader.isCompatible // true or false
-```
+// Start reader
+const claimed = await HoneywellBarcodeReader.startReader();
+if (claimed) {
+  console.log('Scanner claimed successfully');
+  
+  // Disable notifications
+  await HoneywellBarcodeReader.disableScannerNotifications();
+}
 
-The barcode reader needs to be "claimed" by your application; meanwhile no other application can use it. You can do that like this:
-
-```js
-HoneywellBarcodeReader.startReader().then((claimed) => {
-    console.log(claimed ? 'Barcode reader is claimed' : 'Barcode reader is busy');
-});
-```
-
-To get events from the barcode scanner:
-
-```js
-HoneywellBarcodeReader.onBarcodeReadSuccess(event => {
-    console.log('Received data', event);
+// Listen for scans
+HoneywellBarcodeReader.onBarcodeReadSuccess((event) => {
+  console.log('Barcode:', event.data);
 });
 
 HoneywellBarcodeReader.onBarcodeReadFail(() => {
-    console.log('Barcode read failed');
+  console.log('Scan failed');
 });
-```
 
-To free the claim and stop the reader, also freeing up resources:
-
-```js
-HoneywellBarcodeReader.stopReader().then(() => {
-    console.log('Freedom!');
-});
-```
-
-To stop receiving events:
-
-```js
+// Stop reader when done
+await HoneywellBarcodeReader.stopReader();
 HoneywellBarcodeReader.offBarcodeReadSuccess();
 HoneywellBarcodeReader.offBarcodeReadFail();
 ```
-## Credits
 
-Based on the work of [duytq94/react-native-honeywell-barcode-reader](https://github.com/duytq94/react-native-honeywell-barcode-reader)
+### React Hook Example
+```typescript
+import { useEffect } from 'react';
+import HoneywellBarcodeReader from '@castrintt/castro-barcode-reader';
+
+function useBarcodeScanner(onScan: (data: string) => void) {
+  useEffect(() => {
+    if (!HoneywellBarcodeReader.isCompatible) return;
+
+    const startScanner = async () => {
+      const claimed = await HoneywellBarcodeReader.startReader();
+      if (claimed) {
+        await HoneywellBarcodeReader.disableScannerNotifications();
+        
+        HoneywellBarcodeReader.onBarcodeReadSuccess((event) => {
+          onScan(event.data);
+        });
+      }
+    };
+
+    startScanner();
+
+    return () => {
+      HoneywellBarcodeReader.stopReader();
+      HoneywellBarcodeReader.offBarcodeReadSuccess();
+      HoneywellBarcodeReader.offBarcodeReadFail();
+    };
+  }, [onScan]);
+}
+```
+
+## 🎯 API Reference
+
+### Methods
+
+#### `isCompatible: boolean`
+Check if the device has a Honeywell scanner.
+
+#### `startReader(): Promise<boolean>`
+Start the barcode reader. Returns `true` if successfully claimed.
+
+#### `stopReader(): Promise<void>`
+Stop the barcode reader and release resources.
+
+#### `disableScannerNotifications(): Promise<boolean>` 🆕
+Disable sound and vibration notifications.
+
+#### `enableScannerNotifications(): Promise<boolean>` 🆕
+Re-enable sound and vibration notifications.
+
+#### `setReaderProperty(propName: string, value: boolean): Promise<boolean>` 🆕
+Set a boolean property on the scanner.
+
+#### `setReaderPropertyInt(propName: string, value: number): Promise<boolean>` 🆕
+Set an integer property on the scanner.
+
+#### `setReaderPropertyString(propName: string, value: string): Promise<boolean>` 🆕
+Set a string property on the scanner.
+
+#### `onBarcodeReadSuccess(handler: (event: { data: string }) => void): void`
+Register a callback for successful barcode reads.
+
+#### `onBarcodeReadFail(handler: () => void): void`
+Register a callback for failed barcode reads.
+
+#### `offBarcodeReadSuccess(): void`
+Remove the barcode read success callback.
+
+#### `offBarcodeReadFail(): void`
+Remove the barcode read fail callback.
+
+## 🔧 Advanced Configuration
+```typescript
+// Custom property examples
+await HoneywellBarcodeReader.setReaderProperty(
+  'PROPERTY_TRIGGER_CONTROL_MODE',
+  'TRIGGER_CONTROL_MODE_AUTO_CONTROL'
+);
+
+await HoneywellBarcodeReader.setReaderPropertyInt(
+  'PROPERTY_DECODE_TIMEOUT',
+  5000
+);
+```
+
+## 📝 License
+
+MIT
+
+## 🙏 Credits
+
+Based on [duytq94/react-native-honeywell-barcode-reader](https://github.com/duytq94/react-native-honeywell-barcode-reader)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## 📧 Support
+
+For issues and questions, please use the [GitHub Issues](https://github.com/castrintt/castro-barcode-reader/issues) page.
+```
+
+## 📦 Estrutura final do projeto:
+```
+castro-barcode-reader/
+├── android/
+│   ├── build.gradle ✅ (atualizado)
+│   ├── gradle/
+│   │   └── wrapper/
+│   │       └── gradle-wrapper.properties ✅ (novo)
+│   └── src/
+│       └── main/
+│           └── java/
+│               └── com/
+│                   └── duytq94/
+│                       └── HoneywellBarcodeReader/
+│                           ├── HoneywellBarcodeReaderModule.java
+│                           └── HoneywellBarcodeReaderPackage.java
+├── index.js ✅
+├── index.d.ts ✅ (novo)
+├── package.json ✅ (atualizado)
+├── README.md ✅ (atualizado)
+├── LICENSE ✅ (novo)
+├── .gitignore ✅
+└── .npmignore ✅ (novo)

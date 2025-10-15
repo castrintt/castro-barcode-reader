@@ -1,34 +1,68 @@
-const ReactNative = require('react-native')
-const { NativeModules, DeviceEventEmitter } = ReactNative
-const HoneywellBarcodeReader = NativeModules.HoneywellBarcodeReader || {} // Hacky fallback for iOS
+import { NativeModules, NativeEventEmitter } from "react-native";
 
-/**
- * Listen for available events
- * @param  {String} eventName Name of event one of barcodeReadSuccess, barcodeReadFail
- * @param  {Function} handler Event handler
- */
+const { HoneywellBarcodeReader } = NativeModules;
 
-var subscriptionBarcodeReadSuccess = null
-var subscriptionBarcodeReadFail = null
+const eventEmitter = new NativeEventEmitter(HoneywellBarcodeReader);
 
-HoneywellBarcodeReader.onBarcodeReadSuccess = (handler) => {
-    subscriptionBarcodeReadSuccess = DeviceEventEmitter.addListener(HoneywellBarcodeReader.BARCODE_READ_SUCCESS, handler)
-}
+let successListener = null;
+let failListener = null;
 
-HoneywellBarcodeReader.onBarcodeReadFail = (handler) => {
-    subscriptionBarcodeReadFail = DeviceEventEmitter.addListener(HoneywellBarcodeReader.BARCODE_READ_FAIL, handler)
-}
+export default {
+  isCompatible: HoneywellBarcodeReader.isCompatible,
 
-/**
- * Stop listening for event
- * @param  {String} eventName Name of event one of barcodeReadSuccess, barcodeReadFail
- * @param  {Function} handler Event handler
- */
-HoneywellBarcodeReader.offBarcodeReadSuccess = () => {
-    subscriptionBarcodeReadSuccess.remove()
-}
-HoneywellBarcodeReader.offBarcodeReadFail = () => {
-    subscriptionBarcodeReadFail.remove()
-}
+  startReader() {
+    return HoneywellBarcodeReader.startReader();
+  },
 
-module.exports = HoneywellBarcodeReader
+  stopReader() {
+    return HoneywellBarcodeReader.stopReader();
+  },
+
+  disableScannerNotifications() {
+    return HoneywellBarcodeReader.disableScannerNotifications();
+  },
+
+  enableScannerNotifications() {
+    return HoneywellBarcodeReader.enableScannerNotifications();
+  },
+
+  setReaderProperty(propName, value) {
+    return HoneywellBarcodeReader.setReaderProperty(propName, value);
+  },
+
+  setReaderPropertyInt(propName, value) {
+    return HoneywellBarcodeReader.setReaderPropertyInt(propName, value);
+  },
+
+  setReaderPropertyString(propName, value) {
+    return HoneywellBarcodeReader.setReaderPropertyString(propName, value);
+  },
+
+  onBarcodeReadSuccess(handler) {
+    successListener = eventEmitter.addListener(
+      HoneywellBarcodeReader.BARCODE_READ_SUCCESS,
+      handler
+    );
+  },
+
+  onBarcodeReadFail(handler) {
+    failListener = eventEmitter.addListener(
+      HoneywellBarcodeReader.BARCODE_READ_FAIL,
+      handler
+    );
+  },
+
+  offBarcodeReadSuccess() {
+    if (successListener) {
+      successListener.remove();
+      successListener = null;
+    }
+  },
+
+  offBarcodeReadFail() {
+    if (failListener) {
+      failListener.remove();
+      failListener = null;
+    }
+  },
+};
