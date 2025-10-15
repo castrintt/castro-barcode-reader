@@ -26,6 +26,10 @@ export default {
     return HoneywellBarcodeReader.enableScannerNotifications();
   },
 
+  getSupportedProperties() {
+    return HoneywellBarcodeReader.getSupportedProperties();
+  },
+
   setReaderProperty(propName, value) {
     return HoneywellBarcodeReader.setReaderProperty(propName, value);
   },
