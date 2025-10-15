@@ -6,6 +6,11 @@ declare module '@castrintt/castro-barcode-reader' {
   export type BarcodeReadSuccessHandler = (event: BarcodeReadEvent) => void;
   export type BarcodeReadFailHandler = () => void;
 
+  // Tipo para as propriedades suportadas
+  export interface SupportedProperties {
+    [key: string]: string | number | boolean;
+  }
+
   export interface HoneywellBarcodeReaderModule {
     /**
      * Check if device is compatible with Honeywell scanner
@@ -32,6 +37,12 @@ declare module '@castrintt/castro-barcode-reader' {
      * Enable all scanner notifications (sound and vibration)
      */
     enableScannerNotifications(): Promise<boolean>;
+
+    /**
+     * Get all supported properties from the scanner
+     * @returns Promise with object containing all available properties and their current values
+     */
+    getSupportedProperties(): Promise<SupportedProperties>;
 
     /**
      * Set a boolean property on the barcode reader

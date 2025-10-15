@@ -219,6 +219,41 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
         return Build.BRAND.toLowerCase().contains("honeywell");
     }
 
+    @ReactMethod
+    public void getSupportedProperties(final Promise promise) {
+        try {
+            if (reader != null) {
+                Map<String, Object> props = reader.getAllProperties();
+                WritableMap result = Arguments.createMap();
+
+                for (Map.Entry<String, Object> entry : props.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+
+                    if (value instanceof Boolean) {
+                        result.putBoolean(key, (Boolean) value);
+                    } else if (value instanceof Integer) {
+                        result.putInt(key, (Integer) value);
+                    } else if (value instanceof String) {
+                        result.putString(key, (String) value);
+                    } else {
+                        result.putString(key, value.toString());
+                    }
+
+                    if (D)
+                        Log.d(TAG, "Property: " + key + " = " + value);
+                }
+
+                promise.resolve(result);
+            } else {
+                promise.reject("ERROR", "Reader is null");
+            }
+        } catch (Exception e) {
+            promise.reject("ERROR", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
