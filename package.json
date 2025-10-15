@@ -1,12 +1,17 @@
 {
-  "name": "react-native-honeywell-barcode-reader",
-  "description": "A barcode reader for Honeywell handheld devices like Honeywell EDA50K (tested)",
-  "version": "1.0.6",
+  "name": "castro-barcode-reader",
+  "description": "A barcode reader for Honeywell handheld devices like Honeywell EDA60K and EDA61K (tested)",
+  "version": "1.0.0",
   "main": "index.js",
-  "author": "Duy Tran <tranquangduy7994@gmail.com>",
-  "repository": "duytq94/react-native-honeywell-barcode-reader",
+  "author": "Igor Castro <igordc38@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/castrintt/castro-barcode-reader"
+  },
   "keywords": [
     "honeywell",
+    "EDA60K",
+    "EDA61K",
     "barcode",
     "reader"
   ],
