@@ -21,7 +21,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import static com.duytq94.HoneywellBarcodeReader.HoneywellBarcodeReaderPackage.TAG;
+import static com.castro.HoneywellBarcodeReader.HoneywellBarcodeReaderPackage.TAG;
 
 import com.honeywell.aidc.AidcManager;
 import com.honeywell.aidc.AidcManager.CreatedCallback;
