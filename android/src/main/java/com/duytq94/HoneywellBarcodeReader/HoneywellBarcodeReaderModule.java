@@ -118,7 +118,7 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     }
 
     @ReactMethod
-    public void disableScanner Notifications(final Promise promise) {
+    public void disableScannerNotifications(final Promise promise) {
         try {
             if (reader != null) {
                 reader.setProperty(

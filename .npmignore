@@ -1,0 +1,26 @@
+# Development files
+.vscode/
+.idea/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# Build artifacts
+android/build/
+android/.gradle/
+android/local.properties
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Gradle wrapper jar (already in package)
+android/gradle/wrapper/*.jar
