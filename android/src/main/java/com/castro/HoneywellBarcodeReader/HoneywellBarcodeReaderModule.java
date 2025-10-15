@@ -128,21 +128,20 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     public void disableScannerNotifications(final Promise promise) {
         try {
             if (reader != null) {
-                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, false);
-                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, false);
-                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, false);
-
+                reader.setProperty("NTF_GOOD_READ_ENABLED", false);
+                reader.setProperty("NTF_BAD_READ_ENABLED", false);
+                reader.setProperty("NTF_VIBRATE_ENABLED", false);
                 if (D)
-                    Log.d(TAG, "Scanner notifications disabled");
+                    Log.d(TAG, "Scanner notifications disabled successfully");
                 promise.resolve(true);
             } else {
                 promise.reject("ERROR", "Reader is null. Call startReader first.");
             }
         } catch (UnsupportedPropertyException e) {
-            promise.reject("ERROR", "Unsupported property: " + e.getMessage());
+            promise.reject("UNSUPPORTED_PROPERTY", "Unsupported property: " + e.getMessage(), e);
             e.printStackTrace();
         } catch (Exception e) {
-            promise.reject("ERROR", e.getMessage());
+            promise.reject("ERROR", "Error disabling notifications: " + e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -151,18 +150,20 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     public void enableScannerNotifications(final Promise promise) {
         try {
             if (reader != null) {
-                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, true);
-                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, true);
-                reader.setProperty(BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, true);
-
+                reader.setProperty("NTF_GOOD_READ_ENABLED", true);
+                reader.setProperty("NTF_BAD_READ_ENABLED", true);
+                reader.setProperty("NTF_VIBRATE_ENABLED", true);
                 if (D)
-                    Log.d(TAG, "Scanner notifications enabled");
+                    Log.d(TAG, "Scanner notifications enabled successfully");
                 promise.resolve(true);
             } else {
                 promise.reject("ERROR", "Reader is null. Call startReader first.");
             }
+        } catch (UnsupportedPropertyException e) {
+            promise.reject("UNSUPPORTED_PROPERTY", "Unsupported property: " + e.getMessage(), e);
+            e.printStackTrace();
         } catch (Exception e) {
-            promise.reject("ERROR", e.getMessage());
+            promise.reject("ERROR", "Error enabling notifications: " + e.getMessage(), e);
             e.printStackTrace();
         }
     }
