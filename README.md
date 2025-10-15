@@ -219,27 +219,7 @@ Contributions are welcome! Please open an issue or submit a pull request.
 For issues and questions, please use the [GitHub Issues](https://github.com/castrintt/castro-barcode-reader/issues) page.
 ```
 
-## 📦 Estrutura final do projeto:
-```
-castro-barcode-reader/
-├── android/
-│   ├── build.gradle ✅ (atualizado)
-│   ├── gradle/
-│   │   └── wrapper/
-│   │       └── gradle-wrapper.properties ✅ (novo)
-│   └── src/
-│       └── main/
-│           └── java/
-│               └── com/
-│                   └── duytq94/
-│                       └── HoneywellBarcodeReader/
-│                           ├── HoneywellBarcodeReaderModule.java
-│                           └── HoneywellBarcodeReaderPackage.java
-├── index.js ✅
-├── index.d.ts ✅ (novo)
-├── package.json ✅ (atualizado)
-├── README.md ✅ (atualizado)
-├── LICENSE ✅ (novo)
+
 ├── .gitignore ✅
 └── .npmignore ✅ (novo)
 
