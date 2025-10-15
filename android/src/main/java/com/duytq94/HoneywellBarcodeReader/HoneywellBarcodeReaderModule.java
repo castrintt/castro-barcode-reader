@@ -29,6 +29,7 @@ import com.honeywell.aidc.BarcodeFailureEvent;
 import com.honeywell.aidc.BarcodeReadEvent;
 import com.honeywell.aidc.BarcodeReader;
 import com.honeywell.aidc.ScannerUnavailableException;
+import com.honeywell.aidc.UnsupportedPropertyException;
 
 @SuppressWarnings("unused")
 public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule implements BarcodeReader.BarcodeListener {
@@ -46,7 +47,6 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
 
     public HoneywellBarcodeReaderModule(ReactApplicationContext reactContext) {
         super(reactContext);
-
         mReactContext = reactContext;
     }
 
@@ -118,34 +118,115 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     }
 
     @ReactMethod
-    public void setReaderProprety(String propName, int value)  {
-        try{
-            reader.setProperty(propName , value);
-        }catch(Exception e){
-
+    public void disableScanner Notifications(final Promise promise) {
+        try {
+            if (reader != null) {
+                reader.setProperty(
+                    BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, 
+                    false
+                );
+                
+                reader.setProperty(
+                    BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, 
+                    false
+                );
+                
+                reader.setProperty(
+                    BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, 
+                    false
+                );
+                
+                if (D) Log.d(TAG, "Scanner notifications disabled");
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null. Call startReader first.");
+            }
+        } catch (UnsupportedPropertyException e) {
+            promise.reject("ERROR", "Unsupported property: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            promise.reject("ERROR", e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @ReactMethod
-    public void setReaderProprety(String propName, boolean value)  {
-        try{
-            reader.setProperty(propName , value);
-        }catch(Exception e){
-
+    public void enableScannerNotifications(final Promise promise) {
+        try {
+            if (reader != null) {
+                reader.setProperty(
+                    BarcodeReader.PROPERTY_NOTIFICATION_GOOD_READ_ENABLED, 
+                    true
+                );
+                reader.setProperty(
+                    BarcodeReader.PROPERTY_NOTIFICATION_BAD_READ_ENABLED, 
+                    true
+                );
+                reader.setProperty(
+                    BarcodeReader.PROPERTY_NOTIFICATION_VIBRATE_ENABLED, 
+                    true
+                );
+                
+                if (D) Log.d(TAG, "Scanner notifications enabled");
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null. Call startReader first.");
+            }
+        } catch (Exception e) {
+            promise.reject("ERROR", e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @ReactMethod
-    public void setReaderProprety(String propName, String value)  {
-        try{
-            reader.setProperty(propName , value);
-        }catch(Exception e){
+    public void setReaderProperty(String propName, boolean value, final Promise promise) {
+        try {
+            if (reader != null) {
+                reader.setProperty(propName, value);
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null. Call startReader first.");
+            }
+        } catch (UnsupportedPropertyException e) {
+            promise.reject("ERROR", "Unsupported property: " + propName);
+            e.printStackTrace();
+        } catch (Exception e) {
+            promise.reject("ERROR", e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
+    @ReactMethod
+    public void setReaderPropertyInt(String propName, int value, final Promise promise) {
+        try {
+            if (reader != null) {
+                reader.setProperty(propName, value);
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null. Call startReader first.");
+            }
+        } catch (Exception e) {
+            promise.reject("ERROR", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @ReactMethod
+    public void setReaderPropertyString(String propName, String value, final Promise promise) {
+        try {
+            if (reader != null) {
+                reader.setProperty(propName, value);
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null. Call startReader first.");
+            }
+        } catch (Exception e) {
+            promise.reject("ERROR", e.getMessage());
+            e.printStackTrace();
         }
     }
 
     private boolean isCompatible() {
-        // This... is not optimal. Need to find a better way to performantly check whether device has a Honeywell scanner 
         return Build.BRAND.toLowerCase().contains("honeywell");
     }
 
@@ -157,5 +238,4 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
         constants.put("isCompatible", isCompatible());
         return constants;
     }
-
 }
