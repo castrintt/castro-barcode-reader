@@ -1,3 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.duytq94.HoneywellBarcodeReader">
-    <uses-permission android:name="com.honeywell.decode.permission.DECODE" />
+<manifest
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.castro.HoneywellBarcodeReader"
+>
+  <uses-permission android:name="com.honeywell.decode.permission.DECODE" />
 </manifest>

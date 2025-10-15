@@ -1,9 +1,10 @@
 {
   "name": "@castrintt/castro-barcode-reader",
-  "version": "1.0.14",
+  "version": "1.2.0",
   "description": "React Native Honeywell Barcode Reader with notification control",
   "main": "index.js",
   "types": "index.d.ts",
+  "react-native": "index.js",
   "scripts": {
     "test": "echo \"No tests specified\" && exit 0"
   },
@@ -13,7 +14,6 @@
     "barcode",
     "scanner",
     "eda60k",
-    "eda50k",
     "android"
   ],
   "author": "castrintt",
@@ -22,16 +22,8 @@
     "type": "git",
     "url": "https://github.com/castrintt/castro-barcode-reader.git"
   },
-  "bugs": {
-    "url": "https://github.com/castrintt/castro-barcode-reader/issues"
-  },
-  "homepage": "https://github.com/castrintt/castro-barcode-reader#readme",
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
-  },
-  "devDependencies": {
-    "react": "^18.2.0",
-    "react-native": "^0.72.0"
   }
 }
