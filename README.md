@@ -27,6 +27,7 @@ Fork of [react-native-honeywell-barcode-reader](https://github.com/duytq94/react
 npm install @castrintt/castro-barcode-reader
 ```
 
+
 or
 ```bash
 yarn add @castrintt/castro-barcode-reader
