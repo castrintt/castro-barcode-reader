@@ -1,6 +1,6 @@
 {
   "name": "@castrintt/castro-barcode-reader",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "React Native Honeywell Barcode Reader with notification control",
   "main": "index.js",
   "types": "index.d.ts",
