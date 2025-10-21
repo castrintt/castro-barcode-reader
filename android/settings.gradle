@@ -1,1 +1,3 @@
 rootProject.name = 'castro-barcode-reader'
+include ':DataCollection'
+project(':DataCollection').projectDir = new File(settingsDir, 'libs/DataCollection')

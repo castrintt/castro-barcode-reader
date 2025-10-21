@@ -1,0 +1,42 @@
+Signature-Version: 1.0
+SHA-256-Digest-Manifest-Main-Attributes: VgBfIkStqMCp0nqfeVKkcEKHoUsCF
+ vd4rGCBcy2BeYk=
+SHA-256-Digest-Manifest: wpcFrxQKOLjv/SIxY0BvTLGdtGRX1tm8Bho5J8ELiGo=
+Created-By: 1.7.0_05 (Oracle Corporation)
+
+Name: aidl/com/honeywell/Message.aidl
+SHA-256-Digest: 0LW46nhHIzF0T9ZxTTAGL6Qaftt/F63sFU3iNEQLu+E=
+
+Name: res/drawable-xxhdpi-v4/ic_launcher.png
+SHA-256-Digest: DJqoqI5m7rjmiQXddQlNWR23+jUJdRvAbJ69Ygu6yNM=
+
+Name: res/values/values.xml
+SHA-256-Digest: 7OnevJ5FJID9Tfd2aN8qtcgWsUDHM0chjEofoCLUrQM=
+
+Name: AndroidManifest.xml
+SHA-256-Digest: jU+LVT1okMZI/Kq4YY9ENXd6awfmgloHG03rubUXyEI=
+
+Name: classes.jar
+SHA-256-Digest: s92bgZkNgH9VJ9c7RIwn0FkvJGgxcQ+V3CrVp9lhKW0=
+
+Name: res/drawable-xhdpi-v4/ic_launcher.png
+SHA-256-Digest: VWtiXJeUV2fS2HtqouIsuTJKhpZoLChLjOlZjcbcSw4=
+
+Name: res/drawable-hdpi-v4/barcode_example_icon.png
+SHA-256-Digest: UOBaXu59Hpq0ZejMBTYZmpjOV+FyRtU/efNyMC/3f8o=
+
+Name: R.txt
+SHA-256-Digest: VOxIbgV7OVfxUvYU1OOUKEYYwvzyQCLuJSb1r8JpIsc=
+
+Name: res/drawable-mdpi-v4/barcode_example_icon.png
+SHA-256-Digest: xc8gY8PcAHO1lAAIml7wk4cqBPTUK6c8tIGLEvqlQgA=
+
+Name: res/drawable-hdpi-v4/ic_launcher.png
+SHA-256-Digest: tOZJKql7dghJGCqBWrpzV0z6Sluip2X7gVcLTBAr1B0=
+
+Name: res/drawable-mdpi-v4/ic_launcher.png
+SHA-256-Digest: HR2/nAiXRc4gZFwbKvQMQV/YCRfI/RlNA/qKlcIMjAk=
+
+Name: res/drawable-xhdpi-v4/barcode_example_icon.png
+SHA-256-Digest: Dz0oCNOJZW/YlHpwi4EWzAuZtrqeE82i8sx+R5YenIk=
+
