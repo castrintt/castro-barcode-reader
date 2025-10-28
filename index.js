@@ -18,6 +18,14 @@ export default {
     return HoneywellBarcodeReader.stopReader();
   },
 
+  releaseReader() {
+    return HoneywellBarcodeReader.releaseReader();
+  },
+
+  claimReader() {
+    return HoneywellBarcodeReader.claimReader();
+  },
+
   disableScannerNotifications() {
     return HoneywellBarcodeReader.disableScannerNotifications();
   },

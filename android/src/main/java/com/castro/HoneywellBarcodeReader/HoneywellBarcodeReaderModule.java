@@ -114,14 +114,60 @@ public class HoneywellBarcodeReaderModule extends ReactContextBaseJavaModule imp
     }
 
     @ReactMethod
+    public void releaseReader(Promise promise) {
+        try {
+            if (reader != null) {
+                reader.release();
+                if (D)
+                    Log.d(TAG, "Reader released (instance kept alive)");
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null");
+            }
+        } catch (Exception e) {
+            promise.reject("ERROR", "Error releasing reader: " + e.getMessage(), e);
+            e.printStackTrace();
+        }
+    }
+
+    @ReactMethod
     public void stopReader(Promise promise) {
-        if (reader != null) {
-            reader.close();
+        try {
+            if (reader != null) {
+                reader.close();
+                reader = null;
+                if (D)
+                    Log.d(TAG, "Reader closed completely");
+            }
+            if (manager != null) {
+                manager.close();
+                manager = null;
+            }
+            promise.resolve(true);
+        } catch (Exception e) {
+            promise.reject("ERROR", "Error stopping reader: " + e.getMessage(), e);
+            e.printStackTrace();
         }
-        if (manager != null) {
-            manager.close();
+    }
+
+    @ReactMethod
+    public void claimReader(Promise promise) {
+        try {
+            if (reader != null) {
+                reader.claim();
+                if (D)
+                    Log.d(TAG, "Reader claimed");
+                promise.resolve(true);
+            } else {
+                promise.reject("ERROR", "Reader is null. Call startReader first.");
+            }
+        } catch (ScannerUnavailableException e) {
+            promise.reject("SCANNER_UNAVAILABLE", "Scanner unavailable", e);
+            e.printStackTrace();
+        } catch (Exception e) {
+            promise.reject("ERROR", "Error claiming reader: " + e.getMessage(), e);
+            e.printStackTrace();
         }
-        promise.resolve(null);
     }
 
     @ReactMethod

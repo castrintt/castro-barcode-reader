@@ -1,4 +1,4 @@
-declare module '@castrintt/castro-barcode-reader' {
+declare module "@castrintt/castro-barcode-reader" {
   export interface BarcodeReadEvent {
     data: string;
   }
@@ -18,15 +18,30 @@ declare module '@castrintt/castro-barcode-reader' {
     isCompatible: boolean;
 
     /**
-     * Start the barcode reader
+     * Start the barcode reader (creates instance and claims)
      * @returns Promise<boolean> - true if claimed successfully
      */
     startReader(): Promise<boolean>;
 
     /**
-     * Stop the barcode reader
+     * Stop the barcode reader (destroys instance completely)
+     * Use this only when closing the app or final cleanup
      */
     stopReader(): Promise<void>;
+
+    /**
+     * Release the barcode reader claim (keeps instance alive)
+     * Use this when switching between screens
+     * @returns Promise<boolean> - true if released successfully
+     */
+    releaseReader(): Promise<boolean>;
+
+    /**
+     * Claim the barcode reader (re-acquire control)
+     * Use this when returning to a screen that needs the reader
+     * @returns Promise<boolean> - true if claimed successfully
+     */
+    claimReader(): Promise<boolean>;
 
     /**
      * Disable all scanner notifications (sound and vibration)
